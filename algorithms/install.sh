@@ -167,7 +167,7 @@ while [ !$finished ]; do
 	echo "   Leaving this blank will select all available types"
 	echo " Similarity algorithms only take single vertex type"
 	echo
-
+#########这里给出了交互页面，可以是ANY
 	# 3. Ask for vertex types. Replace *vertex-types* placeholder. For similarity algos, only take one vertex type.
 	read -p 'Vertex types: ' vts
 	vts=${vts//[[:space:]]/}
