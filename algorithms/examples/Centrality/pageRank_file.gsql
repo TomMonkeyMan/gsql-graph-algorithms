@@ -6,16 +6,22 @@
 #  a) it reaches maxIter iterations;
 #  b) the max score change for any vertex compared to the last iteration <= maxChange.
 
+########@这些是累加器，初始化了累加器，具体是啥有待研究
         MaxAccum<float> @@maxDiff = 9999; # max score change in an iteration
         SumAccum<float> @received_score = 0; # sum of scores each vertex receives FROM neighbors
         SumAccum<float> @score = 1;   # Initial score for every vertex is 1.
 
+########起始点为Person这样的点
         Start = {Person.*};   #  Start with all vertices of specified type(s)
+########如果误差大于设定最大误差
         WHILE @@maxDiff > maxChange LIMIT maxIter DO
                 @@maxDiff = 0;
+################遍历每一个点，这些点通过Friend这条边指向另一个顶点
                 V = SELECT s
                     FROM Start:s -(Friend:e)-> :t
+                    #t顶点的得分计算
                     ACCUM t.@received_score += s.@score/(s.outdegree("Friend")) 
+                    #s顶点的得分计算
                     POST-ACCUM s.@score = (1.0-damping) + damping * s.@received_score,
                                s.@received_score = 0,
                                @@maxDiff += abs(s.@score - s.@score');
